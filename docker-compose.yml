@@ -1,0 +1,42 @@
+version: '3'
+services:
+  frontend:
+    image: nginx:latest
+    ports:
+      - "80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    networks:
+      - lefts
+
+  backend:
+    build:
+      context: ./backend
+    networks:
+      - lefts
+    ports:
+      - "5000"
+
+  reverse-proxy:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - lefts
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017"
+    networks:
+      - lefts
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  lefts:
+
+volumes:
+  mongo-data:
