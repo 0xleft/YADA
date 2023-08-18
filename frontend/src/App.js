@@ -66,7 +66,7 @@ function Layout() {
 
   return (
     <>
-      {!isNonHeaderPage && <Header auth_level={"student"} username={"Margie Simpson"} />}
+      {!isNonHeaderPage && <Header auth_level={"teacher"} username={"Margie Simpson"} />}
       <Outlet />
     </>
   );

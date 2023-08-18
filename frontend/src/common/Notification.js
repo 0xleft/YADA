@@ -5,6 +5,10 @@ const Notification = ({ message, type }) => {
         return null
     }
 
+    setTimeout(() => {
+        message = null
+    }, 5000)
+
     return (
         <>
             <div className={"flex justify-center items-center h-12 bg-" + type + " text-white text-xl font-['Inter']"}>
