@@ -5,7 +5,7 @@ services:
     ports:
       - "80"
     volumes:
-      - ./frontend:/usr/share/nginx/html:ro
+      - ./frontend/build:/usr/share/nginx/html:ro
     networks:
       - lefts
 
@@ -18,11 +18,14 @@ services:
       - "5000"
 
   reverse-proxy:
+    depends_on:
+      - frontend
+      - backend
     image: nginx:latest
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./reverse.conf:/etc/nginx/nginx.conf:ro
     networks:
       - lefts
 

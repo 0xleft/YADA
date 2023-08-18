@@ -26,8 +26,8 @@ def login():
     
 
 # admin only
-@api.route("/api/auth/add_user", methods=["POST"])
-def add_user():
+@api.route("/api/auth/add_teacher", methods=["POST"])
+def add_teacher():
     data = flask.request.get_json(silent=True, force=True)
     if not data:
         return "Invalid request", 400
@@ -41,13 +41,16 @@ def add_user():
     if db.users.find_one({"username": data["username"]}):
         return "User already exists", 400
     
+    if not data["auth_level"] == 1:
+        return "Invalid auth level", 400
+
     db.users.insert_one({
         "username": data["username"],
         "password": hashlib.sha256(data["password"].encode()).hexdigest(),
         "email": data["email"],
         "phone": data["phone"],
         "full_name": data["full_name"],
-        "auth_level": data["auth_level"]
+        "auth_level": 1
     })
     return "User added :)", 200
 

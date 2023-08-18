@@ -6,14 +6,23 @@ from apis import index, auth, grades, planning
 
 app = flask.Flask(__name__)
 
-app.secret_key = os.urandom(2014)
+app.secret_key = os.urandom(2023)
 
 client = pymongo.MongoClient("mongodb://mongodb:27017/")
 db = client["main"]
 
 @app.route("/api", methods=["GET"])
 def default():
-    return "", 200
+    return "", 418
+
+if not db.users.find_one({"auth_level": 2}):
+    db.users.insert_one({
+        "username": "admin",
+        "password": "admin",
+        "auth_level": 2,
+
+    })
+print("A new admin user has been created. Username: admin, Password: admin. Please change this ASAP.")
 
 if __name__ == "__main__":
     app.register_blueprint(index.api)
