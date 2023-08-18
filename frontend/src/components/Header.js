@@ -1,6 +1,7 @@
 import React from "react";
 import StudentNav from "./StudentNav";
 import AdminNav from "./AdminNav";
+import TeacherNav from "./TeacherNav";
 
 const Header = ({ username, auth_level }) => {
     return (
@@ -10,7 +11,7 @@ const Header = ({ username, auth_level }) => {
                 <div className="shadow-md bg-primary flex flex-row justify-between items-center pb-8 pl-12 pr-16 w-4/5">
                     <div className="self-end flex flex-row mt-12 gap-8 w-2/3 items-start">
                         {/* this so its accessable from shit */}
-                        <img src="../../../../../../../unknown_icon.svg" />
+                        {window.innerWidth > 690 ? <img src="../../../../../../../unknown_icon.svg" /> : undefined}
                         <div className="flex flex-col mt-10 gap-5 w-1/2 items-start">
                             <div className="text-4xl font-['Inter'] w-max">Welcome back!</div>
                             <div className="self-stretch relative flex flex-col justify-end mr-6 items-start pt-8 px-px">
@@ -25,7 +26,7 @@ const Header = ({ username, auth_level }) => {
                     </div>
                     <div className="mt-12">
                         {auth_level === "student" ? <StudentNav /> : undefined}
-                        {auth_level === "teacher" ? <StudentNav /> : undefined}
+                        {auth_level === "teacher" ? <TeacherNav /> : undefined}
                         {auth_level === "admin" ? <AdminNav /> : undefined}
                     </div>
                 </div>

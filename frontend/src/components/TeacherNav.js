@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const StudentNav = () => {
+const TeacherNav = () => {
 
     const currentPath = window.location.pathname;
 
@@ -9,14 +9,14 @@ const StudentNav = () => {
         <>
             <div className="bg-secondary flex flex-col justify-center pl-3 gap-20 h-56 items-center">
                 <div className={"self-start flex flex-col w-32 h-8 shrink-0 items-start pt-1 pb-1 pl-1 " + (currentPath === "/" ? "bg-dasecondary" : "bg-lisecondary")}>
-                    <Link to="/student" className="text-xl font-['Inter']">Home</Link>
+                    <Link to="/teacher" className="text-xl font-['Inter']">Home</Link>
                 </div>
                 <div className="flex flex-col mr-3 gap-2 w-32">
                     <div className={"flex flex-col mr-px h-8 shrink-0 items-start pt-1 pb-1 pl-1 " + (currentPath === "/grades" ? "bg-dasecondary" : "bg-lisecondary")}>
-                        <Link to="/student/grades" className="text-xl font-['Inter']">Grades</Link>
+                        <Link to="/teacher/grades" className="text-xl font-['Inter']">Grades</Link>
                     </div>
                     <div className={"flex flex-col ml-px h-8 shrink-0 items-start pl-1 py-1 " + (currentPath === "/activities" ? "bg-dasecondary" : "bg-lisecondary")}>
-                        <Link to="/student/activities" className="text-xl font-['Inter']">Activities</Link>
+                        <Link to="/teacher/activities" className="text-xl font-['Inter']">Activities</Link>
                     </div>
                 </div>
             </div> 
@@ -24,4 +24,4 @@ const StudentNav = () => {
     );
 }
 
-export default StudentNav;
+export default TeacherNav;
