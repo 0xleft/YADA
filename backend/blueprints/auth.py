@@ -47,14 +47,11 @@ def add_teacher():
     db.users.insert_one({
         "username": data["username"],
         "password": hashlib.sha256(data["password"].encode()).hexdigest(),
-        "email": data["email"],
-        "phone": data["phone"],
-        "full_name": data["full_name"],
-        "auth_level": 1
+        "auth_level": 1,
+        "namesurname": data["full_name"],
     })
     return "User added :)", 200
 
-# admin only
 @api.route("/api/auth/remove_user", methods=["POST"])
 def remove_user():
     data = flask.request.get_json(silent=True, force=True)
@@ -69,7 +66,11 @@ def remove_user():
     
     if not db.users.find_one({"username": data["username"]}):
         return "User does not exist", 400
-    
+
+    user = db.users.find_one({"username": data["username"]})
+    if user["auth_level"] >= session["auth_level"]:
+        return "Cannot remove user with higher or equal auth level", 400
+
     db.users.delete_one({"username": data["username"]})
     return "User removed :)", 200
 
