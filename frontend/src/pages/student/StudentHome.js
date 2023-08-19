@@ -57,6 +57,7 @@ const StudentHome = () => {
         setPopup(!popup);
     }
 
+    // this is so stupid
     const monthToName = {
         1: "January",
         2: "Febuary",
