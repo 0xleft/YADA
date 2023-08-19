@@ -58,6 +58,8 @@ const TeacherHome = () => {
         }
     ]
 
+    // TODO
+    // fetch students of the current lesson
     const students = [
         {name: "John Doe", present: true},
         {name: "Left Mojoe", present: true},

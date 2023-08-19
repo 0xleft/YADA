@@ -61,6 +61,7 @@ function Layout() {
   const isNonHeaderPage = nonHeaderPages.includes(location.pathname);
 
   // fetch user data from backend here
+  // redirect to acording page like teacher or student or admin
 
   // if not logged in, redirect to login page
 

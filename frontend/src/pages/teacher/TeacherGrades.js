@@ -6,12 +6,12 @@ const TeacherGrades = () => {
 
     // TODO fetch tasks
     const fetchedTasks = [
-        {name: "Task 1", class: "S2G1", subject: "Math", published: false},
-        {name: "Task 2", class: "S2G1", subject: "Math", published: true},
-        {name: "Task 3", class: "S2G1", subject: "Math", published: false},
-        {name: "Task 4", class: "S2G1", subject: "Math", published: true},
-        {name: "Task 5", class: "S2G1", subject: "Math", published: false},
-        {name: "Task 6", class: "S2G1", subject: "Math", published: true},
+        {name: "Task 1", class: "S2G1", subject: "Math", published: false, id: 1},
+        {name: "Task 2", class: "S2G1", subject: "Math", published: true, id: 2},
+        {name: "Task 3", class: "S2G1", subject: "Math", published: false, id: 3},
+        {name: "Task 4", class: "S2G1", subject: "Math", published: true, id: 4},
+        {name: "Task 5", class: "S2G1", subject: "Math", published: false, id: 5},
+        {name: "Task 6", class: "S2G1", subject: "Math", published: true, id: 6},
     ]
 
     const [tasks, setTasks] = useState(fetchedTasks);
@@ -38,24 +38,66 @@ const TeacherGrades = () => {
     ]
 
     // TODO
+    // fetch subjects for the teacher to choose when creating
+    const subjects = [
+        {name: "Math"},
+        {name: "English"}        
+    ]
+
+    // TODO
     // submit grades to backend
-    const submitGrades = () => {
+    const submitGrades = (taskId, studentGrades) => {
         // TODO
         // send grades to backend
         setPopup(false);
     }
 
-    const publishGrades = () => {
-        // TODO
-        // send grades to backend
-        // mark task as published
+    const publishGrades = (taskId) => {
+        submitGrades(taskId, tasks.find((task) => task.id === taskId).students);
+
+        const newTasks = tasks.map((task) => {
+            if (task.id === taskId) {
+                task.published = true;
+            }
+            return task;
+        })
+        setTasks(newTasks);
         setPopup(false)
     }
 
-    const unpublishGrades = () => {
+    const unpublishGrades = (taskId) => {
         // TODO
         // mark task as unpublished
+        const newTasks = tasks.map((task) => {
+            if (task.id === taskId) {
+                task.published = false;
+            }
+            return task;
+        })
+        setTasks(newTasks);
         setPopup(false)
+    }
+
+    const deleteTask = (taskId) => {
+        // TODO
+        // delete task from backend
+        const newTasks = tasks.filter((task) => task.id !== taskId);
+        setTasks(newTasks);
+        setPopup(false);
+    }
+
+    const createTask = () => {
+        // TODO
+        // send task to backend
+        // the backend should send the id of the task back
+
+        const taskName = document.getElementById("taskTitle").value;
+        const taskClass = document.getElementById("taskClass").value;
+        const taskSubject = document.getElementById("taskSubject").value;
+
+        const newTasks = [...tasks, {name: taskName, class: taskClass, subject: taskSubject, published: false, id: 99}];
+        setTasks(newTasks);
+        setPopup(false);
     }
 
     return (
@@ -68,7 +110,40 @@ const TeacherGrades = () => {
                 <div className="shadow-md bg-primary flex flex-row justify-between items-center pb-8 pl-12 pr-16 w-4/5">
                     <div className="flex flex-col w-full">
                         <h1 className="text-2xl pt-4">Ungraded tasks</h1>
-                        <button className="shadow-md p-3 mt-10 w-2/5">Create new task</button>
+                        <button className="shadow-md p-3 mt-10 w-2/5" onClick={
+                            () => {
+                                togglePopup("Create new task", (
+                                    <>
+                                        <div className="flex flex-col w-full mt-10">
+                                            <div className="flex flex-col ml-px items-start">
+                                                <div className="text-xs font-['Inter'] text-[#646464] ml-2">
+                                                    Task title
+                                                </div>
+                                                <input id="taskTitle" className="shadow-md self-stretch h-10 shrink-0 pl-3" placeholder="Example test" require={true} />
+                                                <div className="text-xs font-['Inter'] text-[#646464] ml-2 mt-4">
+                                                    Class
+                                                </div>
+                                                <select id="taskClass" className="shadow-md self-stretch h-10 shrink-0 pl-3" require={true}>
+                                                    {classes.map((classObj) => (
+                                                        <option key={classObj.name} value={classObj.name}>{classObj.name}</option>
+                                                    ))}
+                                                </select>
+                                                <div className="text-xs font-['Inter'] text-[#646464] ml-2 mt-4">
+                                                    Subject
+                                                </div>
+                                                <select id="taskSubject" className="shadow-md self-stretch h-10 shrink-0 pl-3" require={true}>
+                                                    {subjects.map((subject) => (
+                                                        <option key={subject.name} value={subject.name}>{subject.name}</option>
+                                                    ))}
+                                                </select>
+
+                                                <button className="shadow-md p-3 mt-10 w-2/5" onClick={createTask}>Create task</button>
+                                            </div>
+                                        </div>
+                                    </>
+                                ))
+                            }
+                        }>Create new task</button>
                             <div className="flex flex-col w-full">
                             {tasks.filter((task) => !task.published).map((task) => {
                                 return (
@@ -78,11 +153,13 @@ const TeacherGrades = () => {
                                         <h1 className="mr-10">Subject: {task.subject}</h1>
                                         <button className="ml-auto w-1/5 shadow-md p-3" onClick={
                                             () => {
+                                                const taskId = task.id;
+
                                                 // TODO 
                                                 // fetch class for task for grading and for info before opening popup
                                                 
                                                 const taskInfo = {
-                                                    id: 10,
+                                                    id: task.id,
                                                     name: "Task 1",
                                                     class: "S2G1",
                                                     subject: "Math",
@@ -100,8 +177,8 @@ const TeacherGrades = () => {
                                                         <div className="flex flex-col w-full">
                                                             {/* button to save grade and a button to post grades */}
                                                             <div className="flex flex-row">
-                                                                <button className="shadow-md p-3 mt-10 w-2/5" onClick={submitGrades}>Save grades</button>
-                                                                <button className="shadow-md p-3 mt-10 w-2/5" onClick={publishGrades}>Post grades</button>
+                                                                <button className="shadow-md p-3 mt-10 w-2/5" onClick={submitGrades.bind(null, taskInfo.students)}>Save grades</button>
+                                                                <button className="shadow-md p-3 mt-10 w-2/5" onClick={publishGrades.bind(null, taskId)}>Publish grades</button>
                                                             </div>
                                                             {taskInfo.students.map((student, index) => (
                                                                 <div className="flex flex-col shadow-md w-full overflow-auto" key={student.name}>
@@ -112,6 +189,7 @@ const TeacherGrades = () => {
                                                                 </div>
                                                               </div>
                                                             ))}
+                                                            <button className="shadow-md p-3 mt-10 w-2/5" onClick={deleteTask.bind(null, taskId)}>Delete grades</button>
                                                         </div>
                                                     </>
                                                 ))
@@ -140,6 +218,8 @@ const TeacherGrades = () => {
                                         <h1 className="mr-10">Subject: {task.subject}</h1>
                                         <button className="ml-auto w-1/5 shadow-md p-3" onClick={
                                             () => {
+                                                const taskId = task.id;
+
                                                 // TODO 
                                                 // fetch class for task for grading and for info before opening popup
                                                 const taskInfo = {
@@ -161,7 +241,7 @@ const TeacherGrades = () => {
                                                         <div className="flex flex-col w-full">
                                                             {/* button to save grade and a button to post grades */}
                                                             <div className="flex flex-row">
-                                                                <button className="shadow-md p-3 mt-10 w-2/5" onClick={unpublishGrades}>Unpublish grades</button>
+                                                                <button className="shadow-md p-3 mt-10 w-2/5" onClick={unpublishGrades.bind(null, taskId)}>Unpublish grades</button>
                                                             </div>
                                                             {taskInfo.students.map((student, index) => (
                                                                 <div className="flex flex-col shadow-md w-full overflow-auto" key={student.name}>
