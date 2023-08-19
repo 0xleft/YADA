@@ -79,6 +79,26 @@ const StudentHome = () => {
             <div className="flex flex-col items-center mt-10" id="NewRootRoot">
                 <div className="shadow-md bg-primary flex flex-row justify-between items-center pb-8 pl-12 pr-16 w-4/5">
                     <div className="flex flex-col w-full">
+                        <h1 className="text-2xl pt-4 mb-4">Asigned tasks</h1>
+                        
+                        {asignedTasks.map((task) => {
+                            return (
+                                <div className="flex flex-col shadow-md w-full overflow-auto p-5" key={task.title}>
+                                    <div className="flex flex-row items-center pl-4 pr-4">
+                                        <h1 className="ml-4 text-xl w-full">{task.title}</h1>
+                                        <h1 className="ml-4 text-xl w-full">{task.subject}</h1>
+                                        <h1 className="ml-4 text-xl w-full">{task.grade ? "graded" : "ungraded"}</h1>
+                                    </div>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col items-center mt-10" id="NewRootRoot">
+                <div className="shadow-md bg-primary flex flex-row justify-between items-center pb-8 pl-12 pr-16 w-4/5">
+                    <div className="flex flex-col w-full">
                         <h1 className="text-2xl pt-4">Attendance</h1>
                         {/* create a table where each row is a month where normal days are gray and days with problem are red color 10x10 px size*/}
                         {/* include a scale of days at the top and months on the left */}
@@ -122,26 +142,6 @@ const StudentHome = () => {
                                 )
                             })}
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex flex-col items-center mt-10" id="NewRootRoot">
-                <div className="shadow-md bg-primary flex flex-row justify-between items-center pb-8 pl-12 pr-16 w-4/5">
-                    <div className="flex flex-col w-full">
-                        <h1 className="text-2xl pt-4 mb-4">Asigned tasks</h1>
-                        
-                        {asignedTasks.map((task) => {
-                            return (
-                                <div className="flex flex-col shadow-md w-full overflow-auto p-5" key={task.title}>
-                                    <div className="flex flex-row items-center pl-4 pr-4">
-                                        <h1 className="ml-4 text-xl w-full"><span className="underline">Title:</span> {task.title}</h1>
-                                        <h1 className="ml-4 text-xl w-full"><span className="underline">Subject:</span> {task.subject}</h1>
-                                        <h1 className="ml-4 text-xl w-full"><span className="underline">Status:</span> {task.grade ? "graded" : "ungraded"}</h1>
-                                    </div>
-                                </div>
-                            )
-                        })}
                     </div>
                 </div>
             </div>
