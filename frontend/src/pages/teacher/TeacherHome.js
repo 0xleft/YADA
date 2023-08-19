@@ -97,17 +97,14 @@ const TeacherHome = () => {
                 <div className="flex flex-col items-center">
                     {attendance.map((student, index) => {
                       return (
-                        <>
-                          
-                          <div className="flex flex-col shadow-md w-full overflow-auto">
-                            <div className="flex flex-row items-center pl-4 pr-4">
-                              <img src="../../../unknown_icon.svg" className="w-10 h-10" />
-                              <h1 className="ml-4 text-xl w-full">{student.name}</h1>
-                              <button onClick={() => changeAttendance(index, true)} className="w-1/2 m-4 shadow-md h-10 mt-12">Present</button>
-                              <button onClick={() => changeAttendance(index, false)} className="w-1/2 m-4 shadow-md h-10 mt-12">Absent</button>
-                            </div>
+                        <div className="flex flex-col shadow-md w-full overflow-auto" key={student.name}>
+                          <div className="flex flex-row items-center pl-4 pr-4">
+                            <img src="../../../unknown_icon.svg" className="w-10 h-10" />
+                            <h1 className="ml-4 text-xl w-full">{student.name}</h1>
+                            <button onClick={() => changeAttendance(index, true)} className="w-1/2 m-4 shadow-md h-10 mt-12">Present</button>
+                            <button onClick={() => changeAttendance(index, false)} className="w-1/2 m-4 shadow-md h-10 mt-12">Absent</button>
                           </div>
-                        </>
+                        </div>
                       )
                     })}
                 </div>
@@ -138,27 +135,21 @@ const TeacherHome = () => {
                       <h1 className="text-2xl pt-4 mb-10">Schedule</h1>
                       <div className="flex-1 grid grid-cols-5">
                           {schedule.map((day) => {
-
                               return (
-                                <>
-                                  <div className="flex flex-col items-center" key={day.day}>
-                                      <h1 className="text-xl mb-10">{day.day}</h1>
-                                      {day.lessons.map((lesson) => {
-                                        return (
-                                          <>
-                                            {/* one hour is h-screen/9 place the lesson in the correct place */}
-                                            <div className={`border-1 shadow-md w-4/5 flex flex-col m-2 ${
-                                              lesson.current ? "bg-secondary" : ""
-                                            }`} key={`${lesson.time}-${lesson.room}`}>
-                                              <h1>{lesson.time}</h1>
-                                              <h1>{lesson.subject}</h1>
-                                              <h1>{lesson.room}</h1>
-                                            </div>
-                                          </>
-                                        )
-                                      })}
-                                  </div>
-                                </>
+                                <div className="flex flex-col items-center" key={day.day}>
+                                  <h1 className="text-xl mb-10">{day.day}</h1>
+                                  {day.lessons.map((lesson) => {
+                                    return (
+                                      <div className={`border-1 shadow-md w-4/5 flex flex-col m-2 ${
+                                        lesson.current ? "bg-secondary" : ""
+                                      }`} key={`${lesson.time}-${lesson.room}`}>
+                                        <h1>{lesson.time}</h1>
+                                        <h1>{lesson.subject}</h1>
+                                        <h1>{lesson.room}</h1>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
                               )
                           })}
                       </div>

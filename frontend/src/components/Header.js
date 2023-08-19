@@ -6,7 +6,6 @@ import TeacherNav from "./TeacherNav";
 const Header = ({ username, auth_level }) => {
     return (
         <>
-
             <div className="flex flex-col items-center" id="NewRootRoot">
                 <div className="shadow-md bg-primary flex flex-row justify-between items-center pb-8 pl-12 pr-16 w-4/5">
                     <div className="self-end flex flex-row mt-12 gap-8 w-2/3 items-start">

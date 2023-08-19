@@ -66,6 +66,7 @@ function Layout() {
 
   return (
     <>
+      {/* TESTING ONLY TODO REMOVE */}
       {!isNonHeaderPage && <Header auth_level={"teacher"} username={"Margie Simpson"} />}
       <Outlet />
     </>
