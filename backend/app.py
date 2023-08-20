@@ -2,7 +2,7 @@ import flask
 import pymongo
 import os
 import waitress
-from blueprints import auth
+from blueprints import auth, search, admin
 import hashlib
 from authorizatoin import authorization
 
@@ -27,5 +27,7 @@ print("A new admin user has been created. Username: admin, Password: admin. Plea
 
 if __name__ == "__main__":
     app.register_blueprint(auth.api)
+    app.register_blueprint(search.api)
+    app.register_blueprint(admin.api)
 
     waitress.serve(app, port=5000)
