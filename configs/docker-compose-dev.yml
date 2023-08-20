@@ -1,17 +1,22 @@
 version: '3'
 services:
   frontend:
-    image: nginx:latest
-    ports:
-      - "80"
+    image: node@latest
+    working_dir: /app
     volumes:
-      - ./frontend/build:/usr/share/nginx/html:ro
+      - ./frontend:/app
+    environment:
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    command: npm start
     networks:
       - lefts
 
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile
     networks:
       - lefts
     ports:
