@@ -26,7 +26,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./reverse.conf:/etc/nginx/nginx.conf:ro
+      - ./configs/reverse-prod.conf:/etc/nginx/nginx.conf:ro
     networks:
       - lefts
 

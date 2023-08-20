@@ -13,6 +13,8 @@ import TeacherActivities from "./pages/teacher/TeahcerActivities";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminClasses from "./pages/admin/AdminClasses";
+import axios from "axios";
+import { useEffect } from "react";
 
 function App() {
   return (
@@ -64,6 +66,9 @@ function Layout() {
   // redirect to acording page like teacher or student or admin
 
   // if not logged in, redirect to login page
+  // if logged in, redirect to home page
+
+  
 
   return (
     <>

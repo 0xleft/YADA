@@ -3,6 +3,8 @@ import pymongo
 import os
 import waitress
 from blueprints import auth
+import hashlib
+from authorizatoin import authorization
 
 app = flask.Flask(__name__)
 
@@ -15,13 +17,12 @@ db = client["main"]
 def default():
     return "", 418
 
-if not db.users.find_one({"auth_level": 2}):
-    db.users.insert_one({
-        "username": "admin",
-        "password": "admin",
-        "auth_level": 2,
-        "namesurname": "Admin Admin"
-    })
+db.users.update_one({"username": "admin"}, {"$set": 
+    {
+        "password": hashlib.sha256(("admin" + "saltysalt").encode()).hexdigest(),
+        "namesurname": "Admin Admin",
+        "auth_level": 2
+    }}, upsert=True)
 print("A new admin user has been created. Username: admin, Password: admin. Please change this ASAP.")
 
 if __name__ == "__main__":

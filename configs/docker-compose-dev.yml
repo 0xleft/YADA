@@ -1,14 +1,14 @@
 version: '3'
 services:
   frontend:
-    image: node@latest
+    image: node:18
     working_dir: /app
     volumes:
       - ./frontend:/app
     environment:
       NODE_ENV: development
     ports:
-      - "3000:3000"
+      - "3000"
     command: npm start
     networks:
       - lefts
@@ -30,7 +30,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./reverse.conf:/etc/nginx/nginx.conf:ro
+      - ./configs/reverse-dev.conf:/etc/nginx/nginx.conf:ro
     networks:
       - lefts
 

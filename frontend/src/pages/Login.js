@@ -1,16 +1,39 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
 
     const navigate = useNavigate();
 
     const login = () => {
-        // TODO
-        // send login request
-        // store data in context so that it can be accessed by other pages
-        // if success, navigate to home page (student or teacher or admin)
-        navigate("/student");
+        
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        axios.post("http://localhost/api/auth/login", {
+            username: username,
+            password: password
+        }).then((response) => {
+
+            if (response.status !== 200) {
+                return;
+            }
+
+            const data = response.data;
+            localStorage.setItem("namesurname", data.namesurname);
+
+            switch (data.auth_level) {
+                case 0:
+                    localStorage.setItem("type", "student");
+                case 1:
+                    localStorage.setItem("type", "teacher");
+                case 2:
+                    localStorage.setItem("type", "admin");
+            }
+        }).catch((error) => {
+            console.log("error");
+        });
     };
 
     return (
