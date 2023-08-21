@@ -11,5 +11,8 @@ cp ./configs/docker-compose-dev.yml ./docker-compose.yml
 
 ```bash
 cp ./configs/docker-compose-prod.yml ./docker-compose.yml
+cd ./frontend
+npm run build
+cd ..
 ./start.sh
 ```
