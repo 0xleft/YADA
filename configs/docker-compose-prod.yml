@@ -5,7 +5,8 @@ services:
     ports:
       - "80"
     volumes:
-      - ./frontend/build:/usr/share/nginx/html:ro
+      - ./frontend/build:/usr/share/nginx/html:ros
+      - ./configs/frontend-prod.conf:/etc/nginx/nginx.conf:ro
     networks:
       - lefts
 
