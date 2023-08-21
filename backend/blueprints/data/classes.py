@@ -106,5 +106,16 @@ def get_my_classes():
     data = request.get_json(force=True, silent=True)
     if not data:
         return "No data", 400
-    
-    
+
+    userid = data["userid"]
+
+    classes = list(db.classes.find({"students": userid}))
+
+    classes_out = []
+    for clazz in classes:
+        classes_out.append({
+            "name": clazz["name"],
+            "classid": str(clazz["_id"])
+        })
+
+    return jsonify(classes_out), 200

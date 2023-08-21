@@ -7,7 +7,7 @@ def authorization(required_level):
         def wrapper(*args, **kwargs):
             if 'auth_level' in session:
                 user_level = session['auth_level']
-                if user_level == required_level:
+                if user_level >= required_level:
                     return func(*args, **kwargs)
             return redirect("/login")
         return wrapper

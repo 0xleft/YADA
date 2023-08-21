@@ -2,7 +2,7 @@ import flask
 import pymongo
 import os
 import waitress
-from blueprints import auth, search, admin
+from blueprints import auth, search, admin, student
 from blueprints.data import tasks, users, classes
 import hashlib
 from authorizatoin import authorization
@@ -30,6 +30,7 @@ if __name__ == "__main__":
     app.register_blueprint(auth.api)
     app.register_blueprint(search.api)
     app.register_blueprint(admin.api)
+    app.register_blueprint(student.api)
 
     app.register_blueprint(tasks.api)
     app.register_blueprint(users.api)

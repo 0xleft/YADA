@@ -64,3 +64,17 @@ def change_password():
     
     db.users.update_one({"_id": session["userid"]}, {"$set": {"password": hashlib.sha256((new_password + "saltysalt").encode()).hexdigest()}})
     return "Password changed", 200
+
+@api.route("/api/auth/get_user_info", methods=["GET"])
+@authorization(required_level=0)
+def get_user_info():
+    userid = session["userid"]
+
+    user = db.users.find_one({"_id": userid})
+
+    return jsonify({
+        "namesurname": user["namesurname"],
+        "auth_level": authToString(user["auth_level"]),
+        "userid": str(user["_id"]),
+        "class": user["class"]
+    }), 200

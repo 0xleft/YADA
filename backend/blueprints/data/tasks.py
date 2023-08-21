@@ -62,7 +62,7 @@ def create_task():
     clazz = data["class"]
 
     # get all students of the class
-    students = db.users.find({"class": clazz})
+    students = db.users.find({"class": clazz, "auth_level": 0})
 
     # create a task where the asigned_to is the array of all the students
     task = {
@@ -170,8 +170,23 @@ def submit_grades():
 
     return "Grades submitted", 200
 
-@api.route("/api/tasks/get_student_grade", methods=["GET"])
+@api.route("/api/tasks/get_task_grade", methods=["POST"])
 @authorization(0)
-def get_student_grade():
-
+def get_task_grade():
+    data = request.get_json(silent=True, force=True)
+    if not data:
+        return "No data", 400
     
+    if not "taskid" in data:
+        return "Missing parameters", 400
+    
+    taskid = data["taskid"]
+
+    student = db.users.find_one({"_id": session["userid"]})
+
+    if not student:
+        return "Student does not exist", 400
+    
+    return jsonify({
+        "grade": student["grades"][taskid]
+    }), 200
