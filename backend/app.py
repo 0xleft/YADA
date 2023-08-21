@@ -18,6 +18,7 @@ db = client["main"]
 def default():
     return "YADA", 418
 
+# TODO
 db.users.update_one({"username": "admin"}, {"$set": 
     {
         "password": hashlib.sha256(("admin" + "saltysalt").encode()).hexdigest(),
