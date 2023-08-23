@@ -1,4 +1,4 @@
-def authToString(auth: int):
+def auth_to_string(auth: int):
     if auth == 0:
         return "student"
     elif auth == 1:

@@ -3,7 +3,7 @@ import flask
 from flask import session, jsonify, request, send_file, Response, redirect
 import hashlib
 from authorizatoin import authorization
-from utils import authToString
+from utils import auth_to_string
 import pandas
 import time
 
@@ -41,7 +41,7 @@ def login():
 
     return jsonify({
         "namesurname": user["namesurname"],
-        "auth_level": authToString(user["auth_level"]),
+        "auth_level": auth_to_string(user["auth_level"]),
     }), 200
 
 @api.route("/api/auth/change_password", methods=["POST"])
@@ -79,5 +79,5 @@ def get_user_info():
     
     return jsonify({
         "namesurname": user["namesurname"],
-        "auth_level": authToString(user["auth_level"]),
+        "auth_level": auth_to_string(user["auth_level"]),
     }), 200
