@@ -8,8 +8,13 @@ services:
     environment:
       NODE_ENV: development
     ports:
-      - "3000"
-    command: npm run dev
+      - "8080"
+    command: 
+      - /bin/sh
+      - -c
+      - |
+        npm install vite -g
+        npm run dev -- --host
     networks:
       - lefts
 
