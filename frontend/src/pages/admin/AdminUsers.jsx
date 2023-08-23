@@ -51,6 +51,10 @@ const AdminUsers = () => {
         });
     }
 
+    useEffect(() => {
+        search();
+    }, []);
+
     const [popupContent, setPopupContent] = useState(<></>);
     const [popup, setPopup] = useState(false);
     const [popupTitle, setPopupTitle] = useState("");
