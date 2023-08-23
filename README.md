@@ -2,6 +2,8 @@ Figma designs link: https://www.figma.com/file/090d5mhtuqdi8WUq1QG2ox/YADA?type=
 
 ## Development setup
 
+Data structures used in this project is nicely explained in [this document](./data_structures.pdf)
+
 ```bash
 chmod +x start-dev.sh
 ./start-dev.sh
