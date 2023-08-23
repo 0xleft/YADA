@@ -9,7 +9,7 @@ import StudentGrades from "./pages/student/StudentGrades";
 import StudentActivities from "./pages/student/StudentActivities";
 import TeacherHome from "./pages/teacher/TeacherHome";
 import TeacherGrades from "./pages/teacher/TeacherGrades";
-import TeacherActivities from "./pages/teacher/TeahcerActivities";
+import TeacherActivities from "./pages/teacher/TeacherActivities";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminClasses from "./pages/admin/AdminClasses";

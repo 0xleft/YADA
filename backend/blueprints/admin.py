@@ -48,12 +48,12 @@ def summary():
         graded_tasks = {"value": 0}
 
     if not server_load:
-        server_load = {"value": []}
+        server_load = {"value": [0] * 24}
 
     return jsonify({
-        "successful_login_attempts": successful_login_attempts["value"],
-        "failed_login_attempts": failed_login_attempts["value"],
-        "created_tasks": created_tasks["value"],
-        "graded_tasks": graded_tasks["value"],
-        "server_load": server_load["value"]
+        "successLogins": successful_login_attempts["value"],
+        "failLogins": failed_login_attempts["value"],
+        "createdTasks": created_tasks["value"],
+        "gradedTasks": graded_tasks["value"],
+        "serverLoad": server_load["value"]
     }), 200

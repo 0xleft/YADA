@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -12,6 +12,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import { useState } from 'react';
 import Popup from '../../common/Popup';
+import axios from 'axios';
 
 ChartJS.register(
     CategoryScale,
@@ -25,19 +26,24 @@ ChartJS.register(
 
 const AdminDashboard = () => {
 
-    // TODO actually fetch the analytics of the last day
-    const analytics = {
-        successLogins: 100,
-        failLogins: 10,
-        createdTasks: 20,
-        gradedTasks: 30,
-        serverLoad: [
-            10,
-            9.5,
-            8.5,
-            7.4,
-        ]
-    }
+    const [analytics, setAnalytics] = useState({
+        successLogins: 0,
+        failLogins: 0,
+        createdTasks: 0,
+        serverLoad: Array(24).fill(0)
+    });
+
+    useEffect(() => {
+        axios.get("/api/admin/summary").then((response) => {
+            if (response.status !== 200) {
+                return;
+            }
+            setAnalytics(response.data);
+        }).catch((error) => {
+            console.log("error");
+            return;
+        });
+    }, []);
 
     // todo fetch quick action statuses
     const quickActions = {
