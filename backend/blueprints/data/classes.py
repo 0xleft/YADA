@@ -41,6 +41,7 @@ def create_class():
         "name": name,
         "year": year,
         "classid": hashlib.sha256((name + str(year) + str(time.time())).encode()).hexdigest(),
+        "members": []
     })
 
     classdb = db.classes.find_one({"_id": classdb.inserted_id})
@@ -48,7 +49,8 @@ def create_class():
     return jsonify({
         "name": classdb["name"],
         "year": classdb["year"],
-        "classid": classdb["classid"]
+        "classid": classdb["classid"],
+        "members": classdb["members"]
     }), 200
 
 @api.route("/api/classes/download_class_stucture", methods=["GET"])
@@ -86,6 +88,29 @@ def remove_class():
     db.classes.delete_one({"classid": classid})
 
     return "Class deleted", 200
+
+@api.route("/api/classes/get_class", methods=["POST"])
+def get_class():
+    data = request.get_json(silent=True, force=True)
+    if not data:
+        return "No data", 400
+    
+    if not "classid" in data:
+        return "Invalid data", 400
+
+    classid = data["classid"]
+
+    if not db.classes.find_one({"classid": classid}):
+        return "Class does not exist", 400
+
+    clazz = db.classes.find_one({"classid": classid})
+
+    return jsonify({
+        "name": clazz["name"],
+        "year": clazz["year"],
+        "classid": clazz["classid"],
+        "members": clazz["members"]
+    }), 200
 
 @api.route("/api/classes/add_member", methods=["POST"])
 @authorization(required_level=2)

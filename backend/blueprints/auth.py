@@ -35,6 +35,14 @@ def login():
     session["userid"] = user["userid"]
     session["auth_level"] = user["auth_level"]
 
+    # TODO
+    # temp workaround for changing password
+    if password == "changeme123":
+        return jsonify({
+            "namesurname": user["namesurname"],
+            "auth_level": "changepwd",
+        }), 200
+
     return jsonify({
         "namesurname": user["namesurname"],
         "auth_level": auth_to_string(user["auth_level"]),
