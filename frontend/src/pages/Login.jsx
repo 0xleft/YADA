@@ -22,15 +22,9 @@ const Login = () => {
 
             const data = response.data;
             localStorage.setItem("namesurname", data.namesurname);
+            localStorage.setItem("type", data.auth_level);
 
-            switch (data.auth_level) {
-                case 0:
-                    localStorage.setItem("type", "student");
-                case 1:
-                    localStorage.setItem("type", "teacher");
-                case 2:
-                    localStorage.setItem("type", "admin");
-            }
+            navigate("/" + data.auth_level);
         }).catch((error) => {
             console.log("error");
         });

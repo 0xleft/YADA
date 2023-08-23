@@ -6,6 +6,7 @@ from blueprints import auth, search, admin, student
 from blueprints.data import tasks, users, classes
 import hashlib
 from authorizatoin import authorization
+import time
 
 app = flask.Flask(__name__)
 
@@ -28,7 +29,8 @@ db.users.update_one({"username": "admin"}, {"$set":
     {
         "password": hashlib.sha256(("admin" + "saltysalt").encode()).hexdigest(),
         "namesurname": "Admin Admin",
-        "auth_level": 2
+        "auth_level": 2,
+        "userid": hashlib.sha256(("admin" + str(time.time())).encode()).hexdigest(),
     }}, upsert=True)
 print("A new admin user has been created. Username: admin, Password: admin. Please change this ASAP.")
 

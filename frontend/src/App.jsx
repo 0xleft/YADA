@@ -15,6 +15,8 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminClasses from "./pages/admin/AdminClasses";
 import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function App() {
   return (
@@ -41,7 +43,7 @@ function App() {
 
         {/* admin */}
         <Route path="admin">
-          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="" element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="classes" element={<AdminClasses />} />
           <Route path="*" element={<NoMatch />} />
@@ -54,6 +56,7 @@ function App() {
 }
 
 function Layout() {
+  const navigate = useNavigate();
   const location = useLocation();
 
   const nonHeaderPages = [
@@ -62,18 +65,47 @@ function Layout() {
   ];
   const isNonHeaderPage = nonHeaderPages.includes(location.pathname);
 
-  // fetch user data from backend here
-  // redirect to acording page like teacher or student or admin
+  const [user, setUser] = useState(null);
+  const [authLevel, setAuthLevel] = useState(null);
 
-  // if not logged in, redirect to login page
-  // if logged in, redirect to home page
+  useEffect(() => {
+    if (isNonHeaderPage) {
+      return;
+    }
 
-  
+    axios.get("http://localhost/api/auth/get_user_info").then((response) => {
+      if (response.status !== 200) {
+        navigate("/login");
+        return;
+      }
+    }).catch((error) => {
+      console.log("error");
+      navigate("/login");
+      return;
+    });
+
+    if (localStorage.getItem("namesurname") === null) {
+      navigate("/login");
+      return;
+    }
+
+    if (localStorage.getItem("type") === null) {
+      navigate("/login");
+      return;
+    }
+
+    if (location.pathname === "/") {
+      navigate("/" + localStorage.getItem("type"));
+      return;
+    }
+
+    setUser(localStorage.getItem("namesurname"));
+    setAuthLevel(localStorage.getItem("type"));
+  }, [location]);
 
   return (
     <>
-      {/* TESTING ONLY TODO REMOVE */}
-      {!isNonHeaderPage && <Header auth_level={"admin"} username={"Jim Bob"} />}
+      {!isNonHeaderPage && <Header username={user} auth_level={authLevel} />}
       <Outlet />
     </>
   );

@@ -36,7 +36,7 @@ def login():
         db.analytics.update_one({"type": "failed_login_attempts"}, {"$inc": {"value": 1}}, upsert=True)
         return "Wrong username or password", 401
     
-    session["userid"] = str(user["_id"])
+    session["userid"] = user["userid"]
     session["auth_level"] = user["auth_level"]
 
     db.analytics.update_one({"type": "successful_login_attempts"}, {"$inc": {"value": 1}}, upsert=True)
@@ -70,11 +70,13 @@ def change_password():
 def get_user_info():
     userid = session["userid"]
 
-    user = db.users.find_one({"_id": userid})
+    user = db.users.find_one({"userid": userid})
+
+    if not user:
+        return "User not found", 404
 
     return jsonify({
         "namesurname": user["namesurname"],
         "auth_level": authToString(user["auth_level"]),
-        "userid": str(user["_id"]),
-        "class": user["class"]
+        "userid": user["userid"],
     }), 200
