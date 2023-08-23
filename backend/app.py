@@ -5,7 +5,7 @@ import waitress
 from blueprints import auth, search, admin, student
 from blueprints.data import tasks, users, classes
 import hashlib
-from authorizatoin import authorization
+from authorization import authorization
 import time
 
 app = flask.Flask(__name__)

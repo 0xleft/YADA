@@ -2,7 +2,7 @@ import pymongo
 import flask
 from flask import session, jsonify, request, send_file, Response, redirect
 import hashlib
-from authorizatoin import authorization
+from authorization import authorization
 from utils import auth_to_string
 import pandas
 import time
