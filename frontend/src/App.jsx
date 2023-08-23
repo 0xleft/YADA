@@ -73,7 +73,7 @@ function Layout() {
       return;
     }
 
-    axios.get("http://localhost/api/auth/get_user_info").then((response) => {
+    axios.get("/api/auth/get_user_info").then((response) => {
       if (response.status !== 200) {
         navigate("/login");
         return;

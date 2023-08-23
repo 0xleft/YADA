@@ -11,7 +11,7 @@ const Login = () => {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
-        axios.post("http://localhost/api/auth/login", {
+        axios.post("/api/auth/login", {
             username: username,
             password: password
         }).then((response) => {

@@ -13,7 +13,7 @@ const Changepwd = () => {
             return;
         }
 
-        axios.post("http://localhost/api/auth/change_password", {
+        axios.post("/api/auth/change_password", {
             old_password: old_password,
             new_password: new_password
         }).then((response) => {
