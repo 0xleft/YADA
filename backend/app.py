@@ -3,7 +3,7 @@ import pymongo
 import os
 import waitress
 from blueprints import auth, search, admin, student
-from blueprints.data import tasks, users, classes
+from blueprints.data import tasks, users, classes, lesson
 import hashlib
 from authorization import authorization
 import time
@@ -41,6 +41,8 @@ if __name__ == "__main__":
     app.register_blueprint(admin.api)
     app.register_blueprint(student.api)
 
+
+    app.register_blueprint(lesson.api)
     app.register_blueprint(tasks.api)
     app.register_blueprint(users.api)
     app.register_blueprint(classes.api)

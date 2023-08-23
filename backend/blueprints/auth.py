@@ -10,8 +10,6 @@ db = client["main"]
 
 api = flask.Blueprint("auth", __name__)
 
-# userid and auth_level are stored in session
-
 @api.route("/api/auth/logout", methods=["GET"])
 @authorization(required_level=0)
 def logout():

@@ -9,6 +9,16 @@ db = client["main"]
 
 api = flask.Blueprint("classes", __name__)
 
+# class structure:
+# {
+#     "name": "name",
+#     "year": 2020,
+#     "classid": "classid",
+#     "members": [
+#         "userid"
+#     ]
+# }
+
 @api.route("/api/classes/create_class", methods=["POST"])
 @authorization(required_level=2)
 def create_class():

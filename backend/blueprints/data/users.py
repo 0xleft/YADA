@@ -12,6 +12,15 @@ db = client["main"]
 
 api = flask.Blueprint("users", __name__)
 
+# user structure:
+# {
+#     "username": "username",
+#     "password": "password",
+#     "namesurname": "namesurname",
+#     "auth_level": 0,
+#     "userid": "userid"
+# }
+
 @api.route("/api/users/create_user", methods=["POST"])
 @authorization(required_level=2)
 def create_user():
@@ -119,11 +128,6 @@ def remove_user():
     if not db.users.find_one({"userid": userid}):
         return "User does not exist", 400
 
-    user = db.users.find_one({"userid": userid})
-
-    if user["auth_level"] == 2:
-        return "Cannot delete admin", 400
-
-    db.users.delete_one({"userid": userid})
+    db.users.delete_one({"_id": userid})
 
     return "User deleted", 200
