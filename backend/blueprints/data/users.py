@@ -63,6 +63,12 @@ def create_user():
 @authorization(required_level=2)
 def download_user_stucture():
     users_data = list(db.users.find({"auth_level": {"$in": [0, 1]}}))
+    users_data = [{
+        "namesurname": user["namesurname"],
+        "username": user["username"],
+        "auth_level": auth_to_string(user["auth_level"]),
+        "userid": user["userid"]
+    } for user in users_data]
     users_df = pandas.DataFrame(users_data)
     response = Response(
         users_df.to_csv(index=False),

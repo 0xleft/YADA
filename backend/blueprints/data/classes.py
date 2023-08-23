@@ -55,6 +55,11 @@ def create_class():
 @authorization(required_level=2)
 def download_user_stucture():
     class_data = list(db.classes.find({}))
+    class_data = [{
+        "name": clazz["name"],
+        "year": clazz["year"],
+        "classid": clazz["classid"]
+    } for clazz in class_data]
     class_df = pandas.DataFrame(class_data)
     response = Response(
         class_df.to_csv(index=False),
