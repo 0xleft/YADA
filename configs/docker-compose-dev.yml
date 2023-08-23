@@ -17,8 +17,17 @@ services:
         npm run dev -- --host
     networks:
       - lefts
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
+      start_period: 10s
 
   backend:
+    depends_on:
+      mongodb:
+        condition: service_healthy
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -26,11 +35,19 @@ services:
       - lefts
     ports:
       - "5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
+      start_period: 10s
 
   reverse-proxy:
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
     image: nginx:latest
     ports:
       - "80:80"
@@ -45,6 +62,12 @@ services:
       - "27017"
     networks:
       - lefts
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
+      start_period: 10s
     volumes:
       - mongo-data:/data/db
 

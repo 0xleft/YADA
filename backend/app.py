@@ -18,6 +18,11 @@ db = client["main"]
 def default():
     return "YADA", 418
 
+@app.route("/api/health", methods=["GET"])
+def health():
+    print("Health check")
+    return "OK", 200
+
 # TODO
 db.users.update_one({"username": "admin"}, {"$set": 
     {
