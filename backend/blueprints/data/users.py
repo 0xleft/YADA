@@ -4,6 +4,8 @@ from flask import session, jsonify, request, send_file, Response
 import hashlib
 from authorizatoin import authorization
 import pandas
+import time
+from utils import auth_to_string
 
 client = pymongo.MongoClient("mongodb://mongodb:27017/")
 db = client["main"]
@@ -21,24 +23,33 @@ def create_user():
         return "No namesurname or auth_level", 400
 
     namesurname = data["namesurname"]
-    auth_level = data["auth_level"]
+    auth_level = int(data["auth_level"])
 
     if auth_level < 0 or auth_level >= 2:
         return "Invalid auth level", 400
     
-    if db.users.find_one({"namesurname": namesurname}):
+    username = namesurname.lower().replace(" ", "_")
+    
+    if db.users.find_one({"namesurname": namesurname, "username": username}):
         return "User already exists", 400
 
-    username = namesurname.lower().replace(" ", "_")
-
-    db.users.insert_one({
+    user = db.users.insert_one({
         "username": username,
         "password": hashlib.sha256(("changeme123" + "saltysalt").encode()).hexdigest(),
         "namesurname": namesurname,
-        "auth_level": auth_level
+        "auth_level": auth_level,
+        "userid": hashlib.sha256((username + str(time.time())).encode()).hexdigest()
     })
 
-    return "User created", 200
+    added_user = db.users.find_one({"_id": user.inserted_id})
+
+    return jsonify({
+        "namesurname": added_user["namesurname"],
+        "username": added_user["username"],
+        "auth_level": auth_to_string(added_user["auth_level"]),
+        "userid": added_user["userid"]
+    }), 200
+
 
 @api.route("/api/users/upload_user_structure", methods=["POST"])
 @authorization(required_level=2)
@@ -75,7 +86,8 @@ def upload_user_structure():
             "username": row["username"],
             "password": hashlib.sha256((row["password"] + "saltysalt").encode()).hexdigest(),
             "namesurname": row["namesurname"],
-            "auth_level": int(row["auth_level"])
+            "auth_level": int(row["auth_level"]),
+            "userid": hashlib.sha256((row["username"] + str(time.time())).encode()).hexdigest()
         })
 
     return "Users uploaded", 200
@@ -104,9 +116,14 @@ def remove_user():
 
     userid = data["userid"]
 
-    if not db.users.find_one({"_id": userid}):
+    if not db.users.find_one({"userid": userid}):
         return "User does not exist", 400
 
-    db.users.delete_one({"_id": userid})
+    user = db.users.find_one({"userid": userid})
+
+    if user["auth_level"] == 2:
+        return "Cannot delete admin", 400
+
+    db.users.delete_one({"userid": userid})
 
     return "User deleted", 200

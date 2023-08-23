@@ -25,6 +25,7 @@ def health():
     return "OK", 200
 
 # TODO
+# REMOVE THIS
 db.users.update_one({"username": "admin"}, {"$set": 
     {
         "password": hashlib.sha256(("admin" + "saltysalt").encode()).hexdigest(),
