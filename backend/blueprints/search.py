@@ -41,15 +41,16 @@ def search_classes():
     if not data:
         return "No data", 400
     
-    clazz = data["class"]
+    name = data["name"]
     year = data["year"]
 
-    classes = db.classes.find({"name": {"$regex": re.compile(clazz)}, "year": year})
+    classes = db.classes.find({"name": {"$regex": re.compile(name)}})
     
     classes_out = []
     for clazz in classes:
         classes_out.append({
             "name": clazz["name"],
+            "year": clazz["year"],
             "classid": clazz["classid"]
         })
 

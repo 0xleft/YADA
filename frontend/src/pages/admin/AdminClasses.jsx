@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Popup from "../../common/Popup";
+import axios from "axios";
 
 const AdminClasses = () => {
     const uploadData = () => {
@@ -9,32 +10,49 @@ const AdminClasses = () => {
     }
 
     const downloadData = () => {
-        // fetch class data from server
+        open("/api/classes/download_class_stucture", "_blank")
     }
 
-    // TODO
-    // fetch classes from server
-    const [classes, setClasses] = useState([
-        {
-            name: "S4ENA",
-            year: 12,
-            id: 1
-        },
-        {
-            name: "S3ENB",
-            year: 4,
-            id: 2
-        },
-    ]);
+    const [classes, setClasses] = useState([]);
 
     const deleteClass = (id) => {
-        // TODO
-        // delete class from server
-        const newClasses = classes.filter((clas) => {
-            return clas.id !== id
-        })
-        setClasses(newClasses)
+        axios.post("/api/classes/remove_class", {
+            classid: id
+        }).then((response) => {
+            if (response.status !== 200) {
+                return;
+            }
+            const newClasses = classes.filter((clas) => {
+                return clas.classid !== id
+            })
+            setClasses(newClasses)
+        }).catch((error) => {
+            console.log("error");
+            return;
+        });
     }
+
+    const search = () => {
+        const searchName = document.getElementById("searchName").value;
+        const searchYear = document.getElementById("searchYear").value;
+
+        axios.post("/api/search/classes", {
+            name: searchName,
+            year: searchYear
+        }).then((response) => {
+            if (response.status !== 200) {
+                return;
+            }
+            setUsers(response.data)
+        }).catch((error) => {
+            console.log("error");
+            return;
+        });
+    }
+
+    useEffect(() => {
+        search();
+    }, []);
 
     const [popupContent, setPopupContent] = useState(<></>);
     const [popup, setPopup] = useState(false);
@@ -78,10 +96,22 @@ const AdminClasses = () => {
                                         const className = document.getElementById("className").value;
                                         const classYear = document.getElementById("classYear").value;
 
-                                        // TODO
-                                        // submit class to server server responds with the id of the class
-                                        setClasses([...classes, {name: className, year: classYear, id: 3}])
-                                        setPopup(false);
+                                        axios.post("/api/classes/create_class", {
+                                            name: className,
+                                            year: classYear
+                                        }).then((response) => {
+                                            if (response.status !== 200) {
+                                                return;
+                                            }
+                                        
+                                            setClasses([...classes, {name: response.data.name, year: response.data.year, classid: response.data.classid}]);
+                                            setPopup(false);
+                                        }).catch((error) => {
+                                            console.log("error");
+                                            return;
+                                        });
+
+
                                     }}>Create</button>
                                 </>
                             ))
@@ -92,15 +122,7 @@ const AdminClasses = () => {
                         <div className="flex flex-row first:ml-4 last:mr-10">
                                     <input className="shadow-md h-10 bg-primary w-full" placeholder="Class Name" id="searchName" />
                                     <input className="shadow-md h-10 bg-primary w-full" placeholder="Year" id="searchYear" />
-                                    <button className="shadow-md h-10 w-full" onClick={() => {
-                                        const searchName = document.getElementById("searchName").value;
-                                        const searchYear = document.getElementById("searchYear").value;
-
-                                        // TODO
-                                        // fetch users from server
-
-                                        // setClasses(classes)
-                                    }}>Search</button>
+                                    <button className="shadow-md h-10 w-full" onClick={search}>Search</button>
                                 </div>
                             <div className="border-2 border-secondary shadow-md w-full flex flex-col m-2 min-h-screen">
                                 {classes.map((clas) => {
@@ -108,7 +130,7 @@ const AdminClasses = () => {
                                         <div className="flex flex-row h-10 shadow-sm items-center mt-3" key={clas.name}>
                                             <h1 className="ml-10 w-full">{clas.name}</h1>
                                             <h1 className="w-full">{clas.year}</h1>
-                                            <button className="w-1/2 m-4 shadow-md h-10 ml-auto" onClick={deleteClass.bind(null, clas.id)}>Delete</button>
+                                            <button className="w-1/2 m-4 shadow-md h-10 ml-auto" onClick={deleteClass.bind(null, clas.classid)}>Delete</button>
                                         </div>
                                     )
                                 })}

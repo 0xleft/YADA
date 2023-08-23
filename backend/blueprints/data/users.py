@@ -59,48 +59,6 @@ def create_user():
         "userid": added_user["userid"]
     }), 200
 
-
-@api.route("/api/users/upload_user_structure", methods=["POST"])
-@authorization(required_level=2)
-def upload_user_structure():
-    # TODO TEST
-
-    # upload a file containing all the users
-    # the file should be a csv file
-
-    if "file" not in request.files:
-        return "No file", 400
-    
-    file = request.files["file"]
-    if file.filename == "":
-        return "No file", 400
-    
-    if not file.filename.endswith(".csv"):
-        return "Invalid file type", 400
-    
-    # read the csv file
-    df = pandas.read_csv(file)
-    for index, row in df.iterrows():
-        if not "username" in row or not "password" in row or not "namesurname" in row or not "auth_level" in row:
-            return "Invalid file structure", 400
-        
-        if row["auth_level"] < 0 or row["auth_level"] >= 2:
-            return "Invalid auth level", 400
-        
-    # clear database for auth level 0 and 1
-    db.users.delete_many({"auth_level": {"$in": [0, 1]}})
-
-    for index, row in df.iterrows():
-        db.users.insert_one({
-            "username": row["username"],
-            "password": hashlib.sha256((row["password"] + "saltysalt").encode()).hexdigest(),
-            "namesurname": row["namesurname"],
-            "auth_level": int(row["auth_level"]),
-            "userid": hashlib.sha256((row["username"] + str(time.time())).encode()).hexdigest()
-        })
-
-    return "Users uploaded", 200
-
 @api.route("/api/users/download_user_stucture", methods=["GET"])
 @authorization(required_level=2)
 def download_user_stucture():
@@ -128,6 +86,6 @@ def remove_user():
     if not db.users.find_one({"userid": userid}):
         return "User does not exist", 400
 
-    db.users.delete_one({"_id": userid})
+    db.users.delete_one({"userid": userid})
 
     return "User deleted", 200
