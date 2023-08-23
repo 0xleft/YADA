@@ -5,6 +5,7 @@ import hashlib
 from authorizatoin import authorization
 from utils import authToString
 import pandas
+import time
 
 client = pymongo.MongoClient("mongodb://mongodb:27017/")
 db = client["main"]
@@ -76,7 +77,8 @@ def upload_user_structure():
             "username": row["username"],
             "password": hashlib.sha256((row["password"] + "saltysalt").encode()).hexdigest(),
             "namesurname": row["namesurname"],
-            "auth_level": int(row["auth_level"])
+            "auth_level": int(row["auth_level"]),
+            "userid": hashlib.sha256((row["username"] + str(time.time())).encode()).hexdigest()
         })
 
     return "Users uploaded", 200

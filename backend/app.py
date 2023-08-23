@@ -27,6 +27,7 @@ def health():
 # TODO
 db.users.update_one({"username": "admin"}, {"$set": 
     {
+        "username": "admin",
         "password": hashlib.sha256(("admin" + "saltysalt").encode()).hexdigest(),
         "namesurname": "Admin Admin",
         "auth_level": 2,
