@@ -18,14 +18,14 @@ const Changepwd = () => {
             new_password: new_password
         }).then((response) => {
             if (response.status !== 200) {
+                console.log(response.data);
                 return;
             }
+            navigate("/login");
         }).catch((error) => {
             console.log("error");
             return;
         });
-
-        navigate("/login");
     };
 
     return (
