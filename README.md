@@ -3,11 +3,13 @@ Figma designs link: https://www.figma.com/file/090d5mhtuqdi8WUq1QG2ox/YADA?type=
 ## Development setup
 
 ```bash
+chmod +x start-dev.sh
 ./start-dev.sh
 ```
 
 ## Production setup
 
 ```bash
+chmod +x start-prod.sh
 ./start-prod.sh
 ```
