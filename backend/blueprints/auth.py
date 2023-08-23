@@ -4,8 +4,6 @@ from flask import session, jsonify, request, send_file, Response, redirect
 import hashlib
 from authorization import authorization
 from utils import auth_to_string
-import pandas
-import time
 
 client = pymongo.MongoClient("mongodb://mongodb:27017/")
 db = client["main"]

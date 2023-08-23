@@ -1,9 +1,7 @@
 import pymongo
 import flask
 from flask import session, jsonify, request, send_file, Response
-import hashlib
-from authorizatoin import authorization
-import pandas
+from authorization import authorization
 
 client = pymongo.MongoClient("mongodb://mongodb:27017/")
 db = client["main"]

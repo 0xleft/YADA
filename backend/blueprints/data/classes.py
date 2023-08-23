@@ -1,7 +1,6 @@
 import pymongo
 import flask
 from flask import session, jsonify, request, send_file, Response
-import hashlib
 from authorization import authorization
 import pandas
 
