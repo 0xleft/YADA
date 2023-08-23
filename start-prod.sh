@@ -1,3 +1,5 @@
+set -e
+
 cp ./configs/docker-compose-prod.yml ./docker-compose.yml
 cd ./frontend
 npm run build
