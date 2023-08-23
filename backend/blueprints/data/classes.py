@@ -29,7 +29,7 @@ def create_class():
         return "No data", 400
     
     if not "name" in data or not "year" in data:
-        return "No name or year", 400
+        return "Invalid data", 400
 
     name = data["name"]
     year = data["year"]
@@ -76,7 +76,7 @@ def remove_class():
         return "No data", 400
     
     if not "classid" in data:
-        return "No classid", 400
+        return "Invalid data", 400
 
     classid = data["classid"]
 
@@ -86,3 +86,37 @@ def remove_class():
     db.classes.delete_one({"classid": classid})
 
     return "Class deleted", 200
+
+@api.route("/api/classes/add_member", methods=["POST"])
+@authorization(required_level=2)
+def add_member():
+    data = request.get_json(silent=True, force=True)
+    if not data:
+        return "No data", 400
+    
+    if not "classid" in data or not "userid" in data:
+        return "Invalid data", 400
+    
+    classid = data["classid"]
+    userid = data["userid"]
+
+    db.classes.update_one({"classid": classid}, {"$push": {"members": userid}})
+
+    return "Member added", 200
+
+@api.route("/api/classes/remove_member", methods=["POST"])
+@authorization(required_level=2)
+def remove_member():
+    data = request.get_json(silent=True, force=True)
+    if not data:
+        return "No data", 400
+    
+    if not "classid" in data or not "userid" in data:
+        return "Invalid data", 400
+    
+    classid = data["classid"]
+    userid = data["userid"]
+
+    db.classes.update_one({"classid": classid}, {"$pull": {"members": userid}})
+
+    return "Member removed", 200
