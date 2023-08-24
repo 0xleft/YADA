@@ -8,7 +8,7 @@ services:
       - ./frontend/dist:/usr/share/nginx/html:ros
       - ./configs/frontend-prod.conf:/etc/nginx/nginx.conf:ro
     networks:
-      - lefts
+      - yada
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80"]
       interval: 30s
@@ -24,7 +24,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     networks:
-      - lefts
+      - yada
     ports:
       - "5000"
     healthcheck:
@@ -46,14 +46,14 @@ services:
     volumes:
       - ./configs/reverse-prod.conf:/etc/nginx/nginx.conf:ro
     networks:
-      - lefts
+      - yada
 
   mongodb:
     image: mongo:latest
     ports:
       - "27017"
     networks:
-      - lefts
+      - yada
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 30s
@@ -64,7 +64,7 @@ services:
       - mongo-data:/data/db
 
 networks:
-  lefts:
+  yada:
 
 volumes:
   mongo-data:
