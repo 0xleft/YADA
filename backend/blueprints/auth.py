@@ -10,7 +10,7 @@ db = client["main"]
 
 api = flask.Blueprint("auth", __name__)
 
-@api.route("/api/auth/logout", methods=["GET"])
+@api.route("/api/auth/logout", methods=["GET", "POST"])
 @authorization(required_level=0)
 def logout():
     session.clear()

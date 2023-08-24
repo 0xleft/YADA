@@ -75,6 +75,11 @@ function Layout() {
       return;
     }
 
+    if (!location.pathname.includes("/" + localStorage.getItem("type"))) {
+      navigate("/" + localStorage.getItem("type"));
+      return;
+    }
+
     axios.get("/api/auth/get_user_info").then((response) => {
       if (response.status !== 200) {
         navigate("/login");

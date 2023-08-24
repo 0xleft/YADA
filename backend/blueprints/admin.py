@@ -9,6 +9,7 @@ db = client["main"]
 api = flask.Blueprint("admin", __name__)
 
 @api.route("/api/admin/summary", methods=["GET"])
+@authorization(required_level=2)
 def summary():
     # returns 
         #const analytics = {

@@ -6,9 +6,9 @@ def authorization(required_level):
         @wraps(func)
         def wrapper(*args, **kwargs):
             if 'auth_level' in session:
-                user_level = session['auth_level']
+                user_level = int(session['auth_level'])
                 if user_level >= required_level:
                     return func(*args, **kwargs)
-            return redirect("/login")
+            return redirect("/api/auth/logout")
         return wrapper
     return decorator
