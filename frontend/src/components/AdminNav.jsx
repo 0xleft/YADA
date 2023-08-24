@@ -7,7 +7,7 @@ const AdminNav = () => {
 
     return (
         <>
-            <div className="shadow-lg flex flex-col justify-center pl-3 gap-20 h-56 items-center">
+            <div className="shadow-lg flex flex-col justify-center pl-3 gap-20 h-64 items-center">
                 <div className={"self-start flex flex-col w-32 h-8 shrink-0 items-start pt-1 pb-1 pl-1 " + (currentPath === "/admin" ? "" : "shadow-md")}>
                     <Link to="/admin" className="text-xl font-['Inter']">Dashboard</Link>
                 </div>
@@ -17,6 +17,9 @@ const AdminNav = () => {
                     </div>
                     <div className={"flex flex-col ml-px h-8 shrink-0 items-start pl-1 py-1 " + (currentPath === "/admin/classes" ? "" : "shadow-md")}>
                         <Link to="/admin/classes" className="text-xl font-['Inter']">Classes</Link>
+                    </div>
+                    <div className={"flex flex-col ml-px h-8 shrink-0 items-start pl-1 py-1 " + (currentPath === "/admin/lessons" ? "" : "shadow-md")}>
+                        <Link to="/admin/lessons" className="text-xl font-['Inter']">Lessons</Link>
                     </div>
                 </div>
             </div>

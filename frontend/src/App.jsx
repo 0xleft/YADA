@@ -17,6 +17,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import AdminLessons from "./pages/admin/AdminLessons";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
           <Route path="" element={<AdminDashboard />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="classes" element={<AdminClasses />} />
+          <Route path="lessons" element={<AdminLessons />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
         
