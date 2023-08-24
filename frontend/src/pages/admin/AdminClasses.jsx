@@ -43,6 +43,7 @@ const AdminClasses = () => {
             if (response.status !== 200) {
                 return;
             }
+
             setClasses(response.data)
         }).catch((error) => {
             console.log("error");
@@ -63,7 +64,31 @@ const AdminClasses = () => {
             if (response.status !== 200) {
                 return;
             }
-            setUsers(response.data);
+
+            axios.post("/api/classes/get_class", {
+                classid: selectedClassId 
+            }).then((response_class) => {
+                if (response_class.status !== 200) {
+                    return;
+                }
+
+
+                const labeledUsers = response.data.map((user) => {
+                    if (response_class.data.members.includes(user.userid)) {
+                        return {...user, member: true};
+                    } else {
+                        return {...user, member: false};
+                    }
+                });
+
+                console.log(labeledUsers);
+                ///////////////////////////////////// until here
+
+                setUsers(labeledUsers);
+            }).catch((error) => {
+                console.log("error");
+                return;
+            });
         }).catch((error) => {
             console.log("error");
             return;
@@ -74,6 +99,11 @@ const AdminClasses = () => {
 
     // holy shit go around react state like chad
     const showEditPopup = () => {
+
+        if (selectedClassId == 0) {
+            return;
+        }
+
         setPopupTitle("Edit class members");
         setPopupContent(
             <>
@@ -89,10 +119,10 @@ const AdminClasses = () => {
                     <div className="border-2 border-secondary shadow-md w-full flex flex-col m-2 min-h-screen">
                         {users.map((user) => {
                             return (
-                                <div className="flex flex-row h-10 shadow-sm items-center mt-3" key={user.userid}>
+                                <div className="flex flex-row h-14 shadow-sm items-center mt-3" key={user.userid}>
                                     <h1 className="ml-10 w-full">{user.namesurname}</h1>
                                     <h1 className="w-full">{user.auth_level}</h1>
-                                    <button className="w-1/2 m-4 shadow-md h-10" onClick={() => {
+                                    <button className={"w-1/2 m-4 shadow-md h-10"} disabled={user.member} onClick={() => {
                                         axios.post("/api/classes/add_member", {
                                             userid: user.userid,
                                             classid: selectedClassId
@@ -100,11 +130,26 @@ const AdminClasses = () => {
                                             if (response.status !== 200) {
                                                 return;
                                             }
+                                            searchUsers();
                                         }).catch((error) => {
                                             console.log("error");
                                             return;
                                         });
                                     }}>Add</button>
+                                    <button className={"w-1/2 m-4 shadow-md h-10"} disabled={!user.member} onClick={() => {
+                                        axios.post("/api/classes/remove_member", {
+                                            userid: user.userid,
+                                            classid: selectedClassId
+                                        }).then((response) => {
+                                            if (response.status !== 200) {
+                                                return;
+                                            }
+                                            searchUsers();
+                                        }).catch((error) => {
+                                            console.log("error");
+                                            return;
+                                        });
+                                    }}>Remove</button>
                                 </div>
                             )
                         })}
@@ -202,7 +247,11 @@ const AdminClasses = () => {
                                             <h1 className="w-full">{clas.year}</h1>
                                             <button className="w-1/2 m-4 shadow-md h-10" onClick={() => {
                                                 setSelectedClassId(clas.classid);
-                                                showEditPopup();
+                                                
+                                                // workaround?
+                                                setTimeout(() => {
+                                                    showEditPopup();
+                                                }, 10);
                                             }}>Edit</button>
                                             <button className="w-1/2 m-4 shadow-md h-10 ml-auto" onClick={deleteClass.bind(null, clas.classid)}>Delete</button>
                                         </div>

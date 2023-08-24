@@ -32,7 +32,7 @@ def search_users():
             "userid": user["userid"]
         })
 
-    return jsonify(users_out), 200
+    return jsonify(users_out), 200    
 
 @api.route("/api/search/classes", methods=["POST"])
 @authorization(required_level=2)

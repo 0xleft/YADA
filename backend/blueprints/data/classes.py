@@ -125,6 +125,10 @@ def add_member():
     classid = data["classid"]
     userid = data["userid"]
 
+    # check if user already in class
+    if db.classes.find_one({"classid": classid, "members": userid}):
+        return "User already in class", 400
+
     db.classes.update_one({"classid": classid}, {"$push": {"members": userid}})
 
     return "Member added", 200
@@ -142,6 +146,10 @@ def remove_member():
     classid = data["classid"]
     userid = data["userid"]
 
+    # check if user already in class
+    if not db.classes.find_one({"classid": classid, "members": userid}):
+        return "User not in class", 400
+    
     db.classes.update_one({"classid": classid}, {"$pull": {"members": userid}})
 
     return "Member removed", 200
