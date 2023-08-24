@@ -63,12 +63,64 @@ const AdminClasses = () => {
             if (response.status !== 200) {
                 return;
             }
-            setUsers(response.data)
+            setUsers(response.data);
         }).catch((error) => {
             console.log("error");
             return;
         });
     }
+
+    const [selectedClassId, setSelectedClassId] = useState(0);
+
+    // holy shit go around react state like chad
+    const showEditPopup = () => {
+        setPopupTitle("Edit class members");
+        setPopupContent(
+            <>
+                <div className="flex flex-col w-full">
+                    <div className="flex flex-row first:ml-4 last:mr-10">
+                        <input className="shadow-md h-10 bg-primary w-full" placeholder="Name" id="searchName" />
+                        <select className="shadow-md h-10 bg-primary w-full" id="searchAuthLevel">
+                            <option value={0} key={0}>Students</option>
+                            <option value={1} key={1}>Teachers</option>
+                        </select>
+                        <button className="shadow-md h-10 w-full" onClick={searchUsers}>Search</button>
+                    </div>
+                    <div className="border-2 border-secondary shadow-md w-full flex flex-col m-2 min-h-screen">
+                        {users.map((user) => {
+                            return (
+                                <div className="flex flex-row h-10 shadow-sm items-center mt-3" key={user.userid}>
+                                    <h1 className="ml-10 w-full">{user.namesurname}</h1>
+                                    <h1 className="w-full">{user.auth_level}</h1>
+                                    <button className="w-1/2 m-4 shadow-md h-10" onClick={() => {
+                                        axios.post("/api/classes/add_member", {
+                                            userid: user.userid,
+                                            classid: selectedClassId
+                                        }).then((response) => {
+                                            if (response.status !== 200) {
+                                                return;
+                                            }
+                                        }).catch((error) => {
+                                            console.log("error");
+                                            return;
+                                        });
+                                    }}>Add</button>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            </>
+        )
+        setPopup(true);
+    }
+
+    useEffect(() => {
+        if (!popup) {
+            return;
+        }
+        showEditPopup();
+    }, [users])
 
     useEffect(() => {
         search();
@@ -130,8 +182,6 @@ const AdminClasses = () => {
                                             console.log("error");
                                             return;
                                         });
-
-
                                     }}>Create</button>
                                 </>
                             ))
@@ -151,43 +201,8 @@ const AdminClasses = () => {
                                             <h1 className="ml-10 w-full">{clas.name}</h1>
                                             <h1 className="w-full">{clas.year}</h1>
                                             <button className="w-1/2 m-4 shadow-md h-10" onClick={() => {
-                                                togglePopup("Edit class members", (
-                                                    <>
-                                                        <div className="flex flex-col w-full">
-                                                            <div className="flex flex-row first:ml-4 last:mr-10">
-                                                                <input className="shadow-md h-10 bg-primary w-full" placeholder="Name" id="searchName" />
-                                                                <select className="shadow-md h-10 bg-primary w-full" id="searchAuthLevel">
-                                                                    <option value={0} key={0}>Students</option>
-                                                                    <option value={1} key={1}>Teachers</option>
-                                                                </select>
-                                                                <button className="shadow-md h-10 w-full" onClick={searchUsers}>Search</button>
-                                                            </div>
-                                                            <div className="border-2 border-secondary shadow-md w-full flex flex-col m-2 min-h-screen">
-                                                                {users.map((user) => {
-                                                                    return (
-                                                                        <div className="flex flex-row h-10 shadow-sm items-center mt-3" key={user.userid}>
-                                                                            <h1 className="ml-10 w-full">{user.name}</h1>
-                                                                            <h1 className="w-full">{user.auth_level}</h1>
-                                                                            <button className="w-1/2 m-4 shadow-md h-10" onClick={() => {
-                                                                                axios.post("/api/classes/add_user_to_class", {
-                                                                                    userid: user.userid,
-                                                                                    classid: clas.classid
-                                                                                }).then((response) => {
-                                                                                    if (response.status !== 200) {
-                                                                                        return;
-                                                                                    }
-                                                                                }).catch((error) => {
-                                                                                    console.log("error");
-                                                                                    return;
-                                                                                });
-                                                                            }}>Add</button>
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            </div>
-                                                        </div>
-                                                    </>
-                                                ))
+                                                setSelectedClassId(clas.classid);
+                                                showEditPopup();
                                             }}>Edit</button>
                                             <button className="w-1/2 m-4 shadow-md h-10 ml-auto" onClick={deleteClass.bind(null, clas.classid)}>Delete</button>
                                         </div>
